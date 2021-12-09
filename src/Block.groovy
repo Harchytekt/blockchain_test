@@ -12,22 +12,6 @@ class Block {
         this.hash = calculateHash()
     }
 
-    String getHash() {
-        return hash
-    }
-
-    void setHash(String hash) {
-        this.hash = hash
-    }
-
-    String getPreviousHash() {
-        return previousHash
-    }
-
-    void setPreviousHash(String previousHash) {
-        this.previousHash = previousHash
-    }
-
     String getData() {
         return data
     }
@@ -40,16 +24,8 @@ class Block {
         return timeStamp
     }
 
-    void setTimeStamp(long timeStamp) {
-        this.timeStamp = timeStamp
-    }
-
     int getNonce() {
         return nonce
-    }
-
-    void setNonce(int nonce) {
-        this.nonce = nonce
     }
 
     String calculateHash() {

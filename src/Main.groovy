@@ -1,7 +1,7 @@
 import groovy.json.JsonOutput
 
 class Main {
-    static List<Block> blockchain = new ArrayList<>()
+    static Deque<Block> blockchain = new LinkedList<>()
     static int difficulty = 1
 
     static void main(String[] args) {
@@ -12,7 +12,8 @@ class Main {
             blockchain.get(i).mineBlock(difficulty)
         }
 
-        //blockchain.get(0).setData("Hello!")
+        // With this change, the blockchain will be invalid
+//        blockchain.first.setData("Hello!")
 
         println "\nBlockchain is valid: ${isChainValid()}"
 

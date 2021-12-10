@@ -8,7 +8,7 @@ class Block {
     Block(String data, String previousHash) {
         this.data = data
         this.previousHash = previousHash
-        this.timeStamp = new Date().getTime()
+        this.timeStamp = new Date().toInstant().toEpochMilli()
         this.hash = calculateHash()
     }
 
@@ -34,10 +34,10 @@ class Block {
 
     void mineBlock(int difficulty) {
         String target = new String(new char[difficulty]).replace('\0', '0')
-        while(hash.substring(0, difficulty) != target) {
+        while (hash.substring(0, difficulty) != target) {
             nonce++
             hash = calculateHash()
         }
-        println "Block mined! : $hash"
+        println "Block mined!"
     }
 }

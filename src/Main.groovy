@@ -12,34 +12,29 @@ class Main {
             blockchain.get(i).mineBlock(difficulty)
         }
 
-        // With this change, the blockchain will be invalid
-//        blockchain.first.setData("Hello!")
-
         println "\nBlockchain is valid: ${isChainValid()}"
 
-        println "\nThe blockchain:"
+        /*println "\nThe blockchain:"
         String json = JsonOutput.toJson(blockchain)
-        println JsonOutput.prettyPrint(json)
+        println JsonOutput.prettyPrint(json)*/
     }
 
     static boolean isChainValid() {
         Block currentBlock
-        Block previousBlock
+        String previousHash
 
         for (i in 0..<blockchain.size()) {
             currentBlock = blockchain.get(i)
+            previousHash = i == 0 ? "0" : blockchain.get(i-1).hash
 
             if (currentBlock.hash != currentBlock.calculateHash()) {
                 println "Current hashes not equal"
                 return false
             }
 
-            if (i > 0) {
-                previousBlock = blockchain.get(i - 1)
-                if (previousBlock.hash != currentBlock.previousHash) {
-                    println "Previous hashes not equal"
-                    return false
-                }
+            if (previousHash != currentBlock.previousHash) {
+                println "Previous hashes not equal"
+                return false
             }
         }
         return true

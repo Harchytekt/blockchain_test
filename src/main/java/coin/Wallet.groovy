@@ -30,7 +30,7 @@ class Wallet {
     // Returns balance and stores the UTXOs owned by this wallet in this.UTXOs
     float getBalance() {
         float total = 0
-        Main.UTXOs.entrySet().each {
+        CoinTest.UTXOs.entrySet().each {
             TransactionOutput UTXO = it.value
             if (UTXO.isMine(publicKey)) {
                 UTXOs.put(UTXO.id, UTXO)
@@ -43,7 +43,7 @@ class Wallet {
     // Generates and return a new transaction from this wallet
     Transaction sendFunds(PublicKey recipient, float value) {
         if (getBalance() < value) {
-            println "Not enough funds to send the transaction. coin.Transaction discarded."
+            println "Not enough funds to send the transaction. Transaction discarded."
             return null
         }
 

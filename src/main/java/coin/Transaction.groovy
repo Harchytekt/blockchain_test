@@ -1,5 +1,7 @@
 package coin
 
+import utils.StringUtils
+
 import java.security.PrivateKey
 import java.security.PublicKey
 
@@ -42,18 +44,18 @@ class Transaction {
     // True if a new transaction is created
     boolean processTransaction() {
         if (!verifySignature()) {
-            println "coin.Transaction Signature failed to verify"
+            println "Transaction Signature failed to verify"
             return false
         }
 
         // Gather transactions inputs
         inputs.each { input ->
-            input.UTXO = Main.UTXOs.get(input.transactionOutputId)
+            input.UTXO = CoinTest.UTXOs.get(input.transactionOutputId)
         }
 
         // Check if transaction is valid
-        if (getInputsValue() < Main.minimumTransaction) {
-            println "coin.Transaction Inputs to small: ${getInputsValue()}"
+        if (getInputsValue() < CoinTest.minimumTransaction) {
+            println "Transaction Inputs too small: ${getInputsValue()}"
             return false
         }
 
@@ -65,7 +67,7 @@ class Transaction {
 
         // Add outputs to Unspent list
         outputs.each { output ->
-            Main.UTXOs.put(output.id, output)
+            CoinTest.UTXOs.put(output.id, output)
         }
 
         // Remove transaction inputs from UTXO lists as spent
@@ -73,7 +75,7 @@ class Transaction {
             if (input.UTXO == null) {
                 continue
             }
-            Main.UTXOs.remove(input.UTXO.id)
+            CoinTest.UTXOs.remove(input.UTXO.id)
         }
 
         return true

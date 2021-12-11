@@ -1,21 +1,29 @@
 package coin
 
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import utils.AbstractTest
+import utils.StringUtils
 
 import java.security.Security
 
-class Main {
-    static Deque<BlockCoin> blockchain = new LinkedList<>()
+class CoinTest extends AbstractTest {
     static HashMap<String, TransactionOutput> UTXOs = new HashMap<>()
-
-    static int difficulty = 3
     static float minimumTransaction = 0.1f
-    static Wallet walletA
-    static Wallet walletB
-    static Transaction firstTransaction
+    Wallet walletA
+    Wallet walletB
+    Transaction firstTransaction
 
-    static void main(String[] args) {
+    CoinTest() {
+        this.blockchain = new LinkedList<BlockCoin>()
+    }
+
+    CoinTest(int difficulty) {
+        this()
+        this.difficulty = difficulty
+    }
+
+    @Override
+    void launchTest() {
         // Setup Bouncey castle as a Security Provider
         Security.addProvider(new BouncyCastleProvider())
 
@@ -62,7 +70,8 @@ class Main {
         isChainValid()
     }
 
-    static boolean isChainValid() {
+    @Override
+    boolean isChainValid() {
         BlockCoin currentBlock
         BlockCoin previousBlock
         String hashTarget = StringUtils.getDifficultyString(difficulty)
@@ -75,6 +84,12 @@ class Main {
 
             if (currentBlock.hash != currentBlock.calculateHash() || previousBlock.hash != currentBlock.previousHash) {
                 println "Hashes are not equal."
+                if (currentBlock.hash != currentBlock.calculateHash()) {
+                    println "CurrentBlock"
+                }
+                if (previousBlock.hash != currentBlock.previousHash) {
+                    println "PreviousBlock: ${previousBlock.hash} -- ${currentBlock.previousHash}"
+                }
                 return false
             }
 
@@ -132,10 +147,5 @@ class Main {
 
         println "Blockchain is valid"
         return true
-    }
-
-    static void addBlock(BlockCoin newBloc) {
-        newBloc.mineBlock(difficulty)
-        blockchain.add(newBloc)
     }
 }

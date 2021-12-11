@@ -1,23 +1,23 @@
 package coin
 
-class BlockCoin {
-    String hash
-    String previousHash
+import utils.AbstractBlock
+import utils.StringUtils
+
+class BlockCoin extends AbstractBlock {
     String merkleRoot
     List<Transaction> transactions = new ArrayList<>()
-    long timeStamp
-    int nonce
 
     BlockCoin(String previousHash) {
-        this.previousHash = previousHash
-        this.timeStamp = new Date().toInstant().toEpochMilli()
+        super(previousHash)
+
         this.hash = calculateHash()
     }
 
     String calculateHash() {
-        return "$previousHash$timeStamp$nonce$merkleRoot".digest('SHA-256')
+        return calculateHash("$previousHash$timeStamp$nonce$merkleRoot")
     }
 
+    @Override
     void mineBlock(int difficulty) {
         merkleRoot = StringUtils.getMerkleRoot(transactions)
         String target = StringUtils.getDifficultyString(difficulty)
@@ -25,7 +25,7 @@ class BlockCoin {
             nonce++
             hash = calculateHash()
         }
-        println "simple.Block mined!"
+        println "Block mined!"
     }
 
     boolean addTransaction(Transaction transaction) {
@@ -34,12 +34,12 @@ class BlockCoin {
         }
 
         if (previousHash != "0" && !transaction.processTransaction()) {
-            println "coin.Transaction failed to process. Discarded."
+            println "Transaction failed to process. Discarded."
             return false
         }
 
         transactions.add(transaction)
-        println "coin.Transaction successfully added to coin.BlockCoin."
+        println "Transaction successfully added to BlockCoin."
         return true
     }
 }

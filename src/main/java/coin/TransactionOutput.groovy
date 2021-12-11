@@ -1,5 +1,7 @@
 package coin
 
+import utils.StringUtils
+
 import java.security.PublicKey
 
 class TransactionOutput {

@@ -1,18 +1,15 @@
 package simple
 
-import coin.StringUtils
+import utils.AbstractBlock
+import utils.StringUtils
 
-class Block {
-    String hash
-    String previousHash
+class SimpleBlock extends AbstractBlock {
     private String data
-    private long timeStamp
-    private int nonce
 
-    Block(String data, String previousHash) {
+    SimpleBlock(String data, String previousHash) {
+        super(previousHash)
+
         this.data = data
-        this.previousHash = previousHash
-        this.timeStamp = new Date().toInstant().toEpochMilli()
         this.hash = calculateHash()
     }
 
@@ -24,18 +21,11 @@ class Block {
         this.data = data
     }
 
-    long getTimeStamp() {
-        return timeStamp
-    }
-
-    int getNonce() {
-        return nonce
-    }
-
     String calculateHash() {
-        return "$previousHash$timeStamp$nonce$data".digest('SHA-256')
+        return calculateHash("$previousHash$timeStamp$nonce$data")
     }
 
+    @Override
     void mineBlock(int difficulty) {
         String target = StringUtils.getDifficultyString(difficulty)
         while (hash.substring(0, difficulty) != target) {

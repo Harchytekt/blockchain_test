@@ -1,4 +1,6 @@
-package coin
+package utils
+
+import coin.Transaction
 
 import java.security.Key
 import java.security.PrivateKey

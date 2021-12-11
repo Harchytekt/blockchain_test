@@ -1,29 +1,40 @@
 package simple
 
 import groovy.json.JsonOutput
+import utils.AbstractTest
 
-class Main {
-    static Deque<Block> blockchain = new LinkedList<>()
-    static int difficulty = 5
-    static int blockchainSize = 10
+class SimpleTest extends AbstractTest {
+    private int blockchainSize
 
-    static void main(String[] args) {
-        for (int i in 0..blockchainSize) {
+    SimpleTest(int blockchainSize) {
+        this.blockchain = new LinkedList<SimpleBlock>()
+        this.blockchainSize = blockchainSize
+    }
+
+    SimpleTest(int blockchainSize, int difficulty) {
+        this(blockchainSize)
+        this.difficulty = difficulty
+    }
+
+    @Override
+    void launchTest() {
+        for (int i in 0..blockchainSize - 1) {
             String hash = i == 0 ? "0" : blockchain.last().hash
-            blockchain.add(new Block("simple.Block #$i", hash))
+            blockchain.add(new SimpleBlock("Block #$i", hash))
             println "Trying to mine block ${i + 1}"
             blockchain.get(i).mineBlock(difficulty)
         }
 
-        println "\nBlockchain is valid: ${isChainValid()}"
+        isChainValid()
 
         println "\nThe blockchain:"
         String json = JsonOutput.toJson(blockchain)
         println JsonOutput.prettyPrint(json)
     }
 
-    static boolean isChainValid() {
-        Block currentBlock
+    @Override
+    boolean isChainValid() {
+        SimpleBlock currentBlock
         String previousHash
 
         for (i in 0..<blockchain.size()) {
@@ -40,6 +51,8 @@ class Main {
                 return false
             }
         }
+
+        println "\nBlockchain is valid"
         return true
     }
 }

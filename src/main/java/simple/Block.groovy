@@ -1,5 +1,7 @@
 package simple
 
+import coin.StringUtils
+
 class Block {
     String hash
     String previousHash
@@ -35,7 +37,7 @@ class Block {
     }
 
     void mineBlock(int difficulty) {
-        String target = new String(new char[difficulty]).replace('\0', '0')
+        String target = StringUtils.getDifficultyString(difficulty)
         while (hash.substring(0, difficulty) != target) {
             nonce++
             hash = calculateHash()

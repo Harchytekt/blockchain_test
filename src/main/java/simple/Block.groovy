@@ -1,3 +1,5 @@
+package simple
+
 class Block {
     String hash
     String previousHash

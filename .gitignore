@@ -5,6 +5,7 @@ build/
 !**/src/main/**
 !**/src/test/**
 .groovy~
+*.class
 
 ### STS ###
 .apt_generated
